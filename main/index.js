@@ -7,11 +7,23 @@ const { BrowserWindow, app, ipcMain } = require('electron');
 const isDev = require('electron-is-dev');
 const prepareNext = require('electron-next');
 const windowStateKeeper = require('electron-window-state');
+const db = require('../models');
+const { login, createUser } = require('../mainApi/user');
+
 let mainWindow, mainWindowState;
 
 // Prepare the renderer once the app is ready
 app.whenReady().then(async () => {
     await prepareNext('./renderer');
+
+    db.sequelize
+        .sync()
+        .then(() => {
+            console.log('Database connection successful.');
+        })
+        .catch((error) => {
+            console.log('Sequelize Error: ', error);
+        });
 
     mainWindowState = windowStateKeeper({
         defaultWidth: 600,
@@ -38,9 +50,21 @@ app.whenReady().then(async () => {
               slashes: true,
           });
 
+    ipcMain.handle('createUser', (event, data) => {
+        console.log('User: ', data);
+        return createUser(data);
+    });
+    ipcMain.handle('login', (event, data) => {
+        console.log('Login: ', data);
+        return login({
+            handle: data.handle,
+            password: data.password,
+        });
+    });
+
     mainWindow.loadURL(url);
 
-    if (isDev) mainWindow.webContents.openDevTools();
+    // if (isDev) mainWindow.webContents.openDevTools();
     mainWindowState.manage(mainWindow);
 });
 

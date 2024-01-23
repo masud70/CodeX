@@ -1,29 +1,51 @@
-module.exports = class User {
-    constructor({ name, handle, university }) {
-        this.name = name;
-        this.handle = handle;
-        this.university = university;
-        this.db = new PouchDB('user');
-    }
+const { JWT_SECRET } = require('../main/constant');
+const db = require('../models');
+const jwt = require('jsonwebtoken');
 
-    create = async () => {
+module.exports = {
+    createUser: async ({ handle, name, password }) => {
         try {
-            const res = await this.db.put({
-                _id: this.handle,
-                name: this.name,
-                university: this.university,
-            });
-            console.log(res);
+            const result = db.User.create({ handle, name, password });
+            if (result) {
+                return {
+                    status: true,
+                    message: 'User created successfully.',
+                };
+            } else {
+                throw new Error('User not created.');
+            }
         } catch (error) {
-            console.log(error);
+            console.log('User creation error: ', error);
+            return {
+                status: false,
+                message: 'User not created.',
+            };
         }
-    };
-
-    get = async () => {
-        return await this.db.get(this.handle);
-    };
-
-    update = async () => {};
-    
-    delete = async () => {};
+    },
+    login: async ({ handle, password }) => {
+        try {
+            const result = await db.User.findByPk(handle);
+            if (result && result.password === password) {
+                return {
+                    status: true,
+                    message: 'Login successful',
+                    token: jwt.sign(
+                        {
+                            handle: result.handle,
+                            name: result.name,
+                        },
+                        JWT_SECRET
+                    ),
+                };
+            } else {
+                throw new Error('Invalid handle or password.');
+            }
+        } catch (error) {
+            console.log('Login error: ', error);
+            return {
+                status: false,
+                message: error.message,
+            };
+        }
+    },
 };

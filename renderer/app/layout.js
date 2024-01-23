@@ -1,7 +1,9 @@
 'use client';
 import './globals.css';
+import "react-toastify/dist/ReactToastify.css";
 import { NextUIProvider } from '@nextui-org/react';
 import { Roboto } from 'next/font/google';
+import { ToastContainer } from 'react-toastify';
 
 const roboto = Roboto({
     weight: '700',
@@ -16,6 +18,7 @@ export default function RootLayout({ children }) {
                     <div className="w-screen min-h-screen flex flex-col">
                         <div>{children}</div>
                     </div>
+                    <ToastContainer/>
                 </NextUIProvider>
             </body>
         </html>

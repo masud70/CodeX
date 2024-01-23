@@ -1,9 +1,16 @@
-const { ipcRenderer, contextBridge } = require("electron");
+const { ipcRenderer, contextBridge } = require('electron');
 
-contextBridge.exposeInMainWorld("electron", {
-  message: {
-    send: (payload) => ipcRenderer.send("message", payload),
-    on: (handler) => ipcRenderer.on("message", handler),
-    off: (handler) => ipcRenderer.off("message", handler),
-  },
+contextBridge.exposeInMainWorld('api', {
+    message: {
+        send: (payload) => ipcRenderer.send('message', payload),
+        on: (handler) => ipcRenderer.on('message', handler),
+        off: (handler) => ipcRenderer.off('message', handler),
+    },
+    invoke: (channel, data) => {
+        // whitelist channels
+        let validChannels = ['login', 'createUser'];
+        if (validChannels.includes(channel)) {
+            return ipcRenderer.invoke(channel, data);
+        }
+    },
 });
