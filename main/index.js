@@ -50,20 +50,7 @@ app.whenReady().then(async () => {
               slashes: true,
           });
 
-    ipcMain.handle('createUser', (event, data) => {
-        console.log('User: ', data);
-        return createUser(data);
-    });
-    ipcMain.handle('login', (event, data) => {
-        console.log('Login: ', data);
-        return login({
-            handle: data.handle,
-            password: data.password,
-        });
-    });
-
     mainWindow.loadURL(url);
-
     // if (isDev) mainWindow.webContents.openDevTools();
     mainWindowState.manage(mainWindow);
 });
@@ -74,4 +61,12 @@ app.on('window-all-closed', app.quit);
 // listen the channel `message` and resend the received message to the renderer process
 ipcMain.on('message', (event, message) => {
     event.sender.send('message', message);
+});
+ipcMain.handle('signup', (event, data) => {
+    console.log('User data: ', data);
+    return createUser(data);
+});
+ipcMain.handle('login', (event, data) => {
+    console.log('Login: ', data);
+    return login(data);
 });

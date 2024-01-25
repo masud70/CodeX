@@ -1,40 +1,33 @@
 'use client';
 import Link from 'next/link';
-import { Logo } from '../../public/Logo';
+import { Logo } from '../../../public/Logo';
 import { Button, Input } from '@nextui-org/react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import UserPlus from '../components/icons/UserPlus';
-import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../redux/state/authSlice';
-import { hasCookie } from 'cookies-next';
-
-const Login = () => {
+import LoginIcon from '../../components/icons/LoginIcon';
+const SignUp = () => {
     const [handle, setHandle] = useState();
+    const [institute, setInstitute] = useState();
+    const [name, setName] = useState();
     const [password, setPassword] = useState();
-    const router = useRouter();
-    const dispatch = useDispatch();
-    const auth = useSelector((st) => st.auth);
+    const [cpassword, setCPassword] = useState();
 
-    useEffect(() => {
-        if (!hasCookie('codex@token')) {
-            router.push('/');
-        }
-    }, [auth]);
-
-    const handleLogin = async () => {
+    const handleSignUp = async () => {
         try {
-            const result = await window.api.invoke('login', {
+            const result = await window.api.invoke('signup', {
                 handle,
+                name,
+                institute,
                 password,
             });
 
             if (result.status) {
                 setHandle('');
+                setName('');
                 setPassword('');
-                dispatch(login({ token: result.token, user: result.user }));
-                router.push('/dashboard');
+                setCPassword('');
+                setInstitute('');
+                toast.success('Your account has been created! Please, login.');
             } else throw new Error(result.message);
         } catch (error) {
             toast.error(error.message);
@@ -47,8 +40,8 @@ const Login = () => {
             <div className="w-1/5 min-w-[400px] relative p-4 rounded-md bg-slate-400 text-center overflow-hidden">
                 <div className="absolute top-4 right-4">
                     <Button isIconOnly color="secondary">
-                        <Link href={'/signup'}>
-                            <UserPlus />
+                        <Link href={'/'}>
+                            <LoginIcon />
                         </Link>
                     </Button>
                 </div>
@@ -65,19 +58,40 @@ const Login = () => {
                         label="Handle"
                     />
                     <Input
+                        onChange={(h) => setName(h.target.value)}
+                        value={name}
+                        size="sm"
+                        type="text"
+                        label="Name"
+                    />
+                    <Input
+                        onChange={(h) => setInstitute(h.target.value)}
+                        value={institute}
+                        size="sm"
+                        type="text"
+                        label="Institute"
+                    />
+                    <Input
                         onChange={(p) => setPassword(p.target.value)}
                         value={password}
                         size="sm"
                         type="password"
                         label="Password"
                     />
+                    <Input
+                        onChange={(p) => setCPassword(p.target.value)}
+                        value={cpassword}
+                        size="sm"
+                        type="password"
+                        label="Confirm Password"
+                    />
                     <Button
                         size="md"
                         color="secondary"
                         className="font-bold text-md"
-                        onClick={handleLogin}
+                        onClick={handleSignUp}
                     >
-                        <Link href={'/'}>Submit</Link>
+                        <Link href={'/'}>Sign Up</Link>
                     </Button>
                 </div>
             </div>
@@ -85,4 +99,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default SignUp;

@@ -4,17 +4,29 @@ import {
     NavbarBrand,
     NavbarContent,
     NavbarItem,
-    Link,
-    Button,
+    Dropdown,
+    DropdownTrigger,
+    User,
+    DropdownMenu,
+    DropdownItem,
 } from '@nextui-org/react';
 import { AcmeLogo } from './AcmeLogo.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/state/authSlice.js';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const CustomNavbar = () => {
+    const dispatch = useDispatch();
+    const auth = useSelector((st) => st.auth);
+    const router = useRouter();
+
     return (
         <Navbar
             classNames={{
                 item: [
                     'flex',
+                    'justify-between',
                     'relative',
                     'h-full',
                     'items-center',
@@ -57,14 +69,46 @@ const CustomNavbar = () => {
             </NavbarContent>
             <NavbarContent justify="end">
                 <NavbarItem>
-                    <Button
-                        as={Link}
-                        color="primary"
-                        href="/dashboard/admin"
-                        variant="flat"
-                    >
-                        Admin
-                    </Button>
+                    <Dropdown placement="bottom-start">
+                        <DropdownTrigger>
+                            <User
+                                as="button"
+                                avatarProps={{
+                                    isBordered: true,
+                                    src: 'https://i.pravatar.cc/150?u=a042581f4e29026024d',
+                                }}
+                                className="transition-transform"
+                                description={'@' + auth.user.handle}
+                                name={'' + auth.user.name}
+                            />
+                        </DropdownTrigger>
+                        <DropdownMenu aria-label="User Actions" variant="flat">
+                            <DropdownItem key="profile" className="h-14 gap-2">
+                                <p className="font-bold">Signed in as</p>
+                                <p className="font-bold">
+                                    {'' + auth.user.name}
+                                </p>
+                            </DropdownItem>
+                            <DropdownItem key="settings">
+                                My Settings
+                            </DropdownItem>
+                            <DropdownItem key="team_settings">
+                                <Link href="/dashboard/admin">
+                                    Admin Dashboard
+                                </Link>
+                            </DropdownItem>
+                            <DropdownItem
+                                key="logout"
+                                color="danger"
+                                onClick={() => {
+                                    dispatch(logout());
+                                    router.push('/');
+                                }}
+                            >
+                                Log Out
+                            </DropdownItem>
+                        </DropdownMenu>
+                    </Dropdown>
                 </NavbarItem>
             </NavbarContent>
         </Navbar>

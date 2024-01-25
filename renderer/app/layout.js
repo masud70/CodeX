@@ -1,9 +1,10 @@
 'use client';
 import './globals.css';
-import "react-toastify/dist/ReactToastify.css";
+import 'react-toastify/dist/ReactToastify.css';
 import { NextUIProvider } from '@nextui-org/react';
 import { Roboto } from 'next/font/google';
 import { ToastContainer } from 'react-toastify';
+import ReduxProvider from './StoreProvider';
 
 const roboto = Roboto({
     weight: '700',
@@ -11,15 +12,18 @@ const roboto = Roboto({
 });
 
 export default function RootLayout({ children }) {
+
     return (
         <html lang="en" className={roboto.className}>
             <body className="bg-[#0c0a24]">
-                <NextUIProvider>
-                    <div className="w-screen min-h-screen flex flex-col">
-                        <div>{children}</div>
-                    </div>
-                    <ToastContainer/>
-                </NextUIProvider>
+                <ReduxProvider>
+                    <NextUIProvider>
+                        <div className="w-screen min-h-screen flex flex-col">
+                            <div>{children}</div>
+                        </div>
+                        <ToastContainer />
+                    </NextUIProvider>
+                </ReduxProvider>
             </body>
         </html>
     );
