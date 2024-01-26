@@ -9,6 +9,7 @@ const prepareNext = require('electron-next');
 const windowStateKeeper = require('electron-window-state');
 const db = require('../models');
 const { login, createUser } = require('../mainApi/user');
+const { createContest } = require('../mainApi/contest');
 
 let mainWindow, mainWindowState;
 
@@ -70,3 +71,7 @@ ipcMain.handle('login', (event, data) => {
     console.log('Login: ', data);
     return login(data);
 });
+ipcMain.handle('createContest', (e, data)=>{
+    console.log(data);
+    return createContest(data);
+})

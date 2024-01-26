@@ -1,3 +1,4 @@
+@import 'keep-react/css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -22,4 +23,16 @@ html {
 ::-webkit-scrollbar {
     width: 0px;
     background: transparent;
+}
+input:focus {
+    outline: none !important;
+    border-color: none;
+}
+.react-datepicker {
+    background-color: white;
+    position: absolute;
+    border: 1px solid;
+}
+.react-datepicker-popper {
+    z-index: 10000 !important;
 }

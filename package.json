@@ -31,6 +31,7 @@
 		"electron-window-state": "^5.0.3",
 		"framer-motion": "^10.18.0",
 		"jsonwebtoken": "^9.0.2",
+		"keep-react": "^1.1.2",
 		"mysql2": "^3.7.1",
 		"next": "14.0.4",
 		"pouchdb": "^8.0.1",

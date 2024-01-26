@@ -41,7 +41,7 @@ module.exports = {
                     user: {
                         name: result.name,
                         handle: result.handle,
-                        institute: result.handle,
+                        institute: result.institute,
                         image: 'https://w7.pngwing.com/pngs/184/113/png-transparent-user-profile-computer-icons-profile-heroes-black-silhouette-thumbnail.png',
                     },
                     token: jwt.sign(

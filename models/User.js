@@ -1,3 +1,5 @@
+const db = require('.');
+
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         handle: {
@@ -18,6 +20,10 @@ module.exports = (sequelize, DataTypes) => {
             allowNull: false,
         },
     });
+
+    User.associate = (models) => {
+        models.User.hasMany(models.Contest);
+    };
 
     return User;
 };
