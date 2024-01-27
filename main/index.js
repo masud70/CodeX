@@ -9,7 +9,7 @@ const prepareNext = require('electron-next');
 const windowStateKeeper = require('electron-window-state');
 const db = require('../models');
 const { login, createUser } = require('../mainApi/user');
-const { createContest } = require('../mainApi/contest');
+const { createContest, createProblem } = require('../mainApi/contest');
 
 let mainWindow, mainWindowState;
 
@@ -64,14 +64,18 @@ ipcMain.on('message', (event, message) => {
     event.sender.send('message', message);
 });
 ipcMain.handle('signup', (event, data) => {
-    console.log('User data: ', data);
+    console.log('Signup data: ', data);
     return createUser(data);
 });
 ipcMain.handle('login', (event, data) => {
-    console.log('Login: ', data);
+    console.log('Login data: ', data);
     return login(data);
 });
-ipcMain.handle('createContest', (e, data)=>{
-    console.log(data);
+ipcMain.handle('createContest', (e, data) => {
+    console.log('Contest data: ', data);
     return createContest(data);
-})
+});
+ipcMain.handle('createProblem', (e, data) => {
+    console.log('Problem data: ', data);
+    return createProblem(data);
+});

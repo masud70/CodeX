@@ -58,7 +58,7 @@ export default function CreateContestModal() {
 
     return (
         <>
-            <Button onPress={onOpen}>Open Modal</Button>
+            <Button onPress={onOpen}>Create Contest</Button>
             <Modal
                 isOpen={isOpen}
                 onOpenChange={onOpenChange}

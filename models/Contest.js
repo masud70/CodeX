@@ -1,5 +1,3 @@
-const db = require(".");
-
 module.exports = (sequelize, DataTypes) => {
     const Contest = sequelize.define('Contest', {
         id: {
@@ -24,6 +22,10 @@ module.exports = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: false,
         },
+        supportedLanguage: {
+            type: DataTypes.TEXT,
+            defaultValue: 'C, C++, JAVA, PYTHON',
+        },
         isPublic: {
             type: DataTypes.BOOLEAN,
             defaultValue: true,
@@ -36,6 +38,9 @@ module.exports = (sequelize, DataTypes) => {
 
     Contest.associate = (models) => {
         models.Contest.belongsTo(models.User);
+        models.Contest.belongsToMany(models.Problem, {
+            through: models.Contest_Problem,
+        });
     };
 
     return Contest;

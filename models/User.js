@@ -1,5 +1,3 @@
-const db = require('.');
-
 module.exports = (sequelize, DataTypes) => {
     const User = sequelize.define('User', {
         handle: {
@@ -23,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
 
     User.associate = (models) => {
         models.User.hasMany(models.Contest);
+        models.User.hasMany(models.Problem);
     };
 
     return User;

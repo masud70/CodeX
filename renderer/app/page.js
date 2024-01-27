@@ -20,6 +20,8 @@ const Login = () => {
     useEffect(() => {
         if (!hasCookie('codex@token')) {
             router.push('/');
+        } else {
+            router.push('/dashboard');
         }
     }, [auth]);
 
